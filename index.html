@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบลงทะเบียน Open House</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+  
+  <!-- SweetAlert2 & Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: #05070a;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.8) 0px, transparent 100%);
+    }
+
+    .font-tech {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Metallic Silver Glass Card */
+    .silver-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(203, 213, 225, 0.2);
+      box-shadow: 0 0 35px -5px rgba(148, 163, 184, 0.15), 0 0 15px 0px rgba(56, 189, 248, 0.1);
+    }
+
+    .input-field {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .input-field:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.35), inset 0 0 10px rgba(56, 189, 248, 0.1);
+    }
+
+    /* กล่องใส่โลโก้สไตล์ Silver Glow */
+    .logo-box {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.3);
+      box-shadow: 0 0 20px rgba(148, 163, 184, 0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .logo-box:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+    }
+
+    /* ปุ่มสีน้ำเงินวิบวับ (Electric Blue Shimmer Button) */
+    .blue-shimmer-btn {
+      background: linear-gradient(110deg, #1d4ed8 0%, #2563eb 25%, #60a5fa 45%, #ffffff 50%, #60a5fa 55%, #2563eb 75%, #1d4ed8 100%);
+      background-size: 250% 100%;
+      animation: shimmer 3.5s infinite linear;
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.5), 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+    .blue-shimmer-btn:hover {
+      box-shadow: 0 0 28px rgba(37, 99, 235, 0.7), 0 0 15px rgba(96, 165, 250, 0.5);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 250% 0; }
+      100% { background-position: -250% 0; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 text-slate-100">
+
+  <div class="w-full max-w-xl silver-card rounded-3xl p-6 sm:p-10 relative overflow-hidden my-4">
+    <!-- เส้นไฟนีออนด้านบนการ์ด -->
+    <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+
+    <!-- ส่วนโลโก้คู่ PIM & Faculty จากระบบเดิม -->
+    <div class="flex items-center justify-center gap-5 sm:gap-8 mb-6 mt-1">
+      
+      <!-- โลโก้ PIM -->
+      <div class="h-20 w-20 sm:h-24 sm:w-24 logo-box rounded-2xl p-2 flex items-center justify-center">
+        <img src="https://lh3.googleusercontent.com/d/1tiQ8h_rR-acynWOdfR2GbCFWNyiR_Rfn" 
+             alt="PIM Logo" 
+             referrerpolicy="no-referrer"
+             class="h-full w-full object-contain">
+      </div>
+
+      <!-- เส้นคั่นกลางสไตล์ไฟสีเงิน -->
+      <div class="h-12 w-[1.5px] bg-gradient-to-b from-transparent via-slate-400 to-transparent"></div>
+
+      <!-- โลโก้คณะวิศวกรรมศาสตร์และเทคโนโลยี -->
+      <div class="h-20 w-20 sm:h-24 sm:w-24 logo-box rounded-2xl p-2 flex items-center justify-center">
+        <img src="https://lh3.googleusercontent.com/d/1TrbK9nflxOGLK-AnLylj2ZWFoO56GGmk" 
+             alt="Faculty Logo" 
+             referrerpolicy="no-referrer"
+             class="h-full w-full object-contain rounded-lg">
+      </div>
+    </div>
+
+    <!-- หัวข้อและรายละเอียด -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-600/50 text-[11px] tracking-widest text-cyan-300 uppercase mb-3">
+        <span class="relative flex h-2 w-2">
+  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff66] opacity-80"></span>
+  <span class="relative inline-flex rounded-full h-2 w-2 bg-[#00ff66] shadow-[0_0_10px_#00ff66]"></span>
+</span>
+        <span class="font-tech">OPEN HOUSE REGISTRATION</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-wide bg-gradient-to-b from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+        ลงทะเบียนเข้าร่วมกิจกรรม
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-400 mt-1 font-light">
+        คณะวิศวกรรมศาสตร์และเทคโนโลยี สถาบันการจัดการปัญญาภิวัฒน์ (PIM)
+      </p>
+    </div>
+
+    <!-- ฟอร์มลงทะเบียน -->
+    <form id="openHouseForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+      
+      <!-- 1. ชื่อ - สกุล -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5 ml-1">ชื่อ - สกุล <span class="text-cyan-400">*</span></label>
+        <div class="relative">
+          <i data-lucide="user" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="fullName" required placeholder="เช่น นายสมชาย ใจดี" 
+            class="input-field w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none">
+        </div>
+      </div>
+
+      <!-- 2. โรงเรียน -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5 ml-1">โรงเรียน <span class="text-cyan-400">*</span></label>
+        <div class="relative">
+          <i data-lucide="graduation-cap" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="school" required placeholder="ระบุชื่อโรงเรียนปัจจุบัน" 
+            class="input-field w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none">
+        </div>
+      </div>
+
+      <!-- 3. เบอร์โทรศัพท์ -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5 ml-1">เบอร์โทรศัพท์ <span class="text-cyan-400">*</span></label>
+        <div class="relative">
+          <i data-lucide="phone" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="tel" id="phone" required pattern="[0-9]{9,10}" placeholder="08XXXXXXXX" 
+            class="input-field w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none">
+        </div>
+      </div>
+
+      <!-- 4. อาชีพในฝัน -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5 ml-1">อาชีพในฝัน <span class="text-cyan-400">*</span></label>
+        <div class="relative">
+          <i data-lucide="briefcase" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="career" required placeholder="เช่น AI Engineer, Software Developer, Data Scientist" 
+            class="input-field w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none">
+        </div>
+      </div>
+
+      <!-- 5. ฐานกิจกรรมของสาขาที่ชื่นชอบ -->
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1.5 ml-1">ฐานกิจกรรมที่สนใจ <span class="text-cyan-400">*</span></label>
+        <div class="relative">
+          <i data-lucide="cpu" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <select id="activity" required 
+            class="input-field w-full pl-11 pr-10 py-3 rounded-xl text-sm text-white focus:outline-none appearance-none">
+            <option value="" class="bg-slate-900 text-slate-500" disabled selected>เลือกฐานกิจกรรมที่สนใจ</option>
+            <option value="ฐานกิจกรรม DIT (Digital and Information Technology)" class="bg-slate-900 text-slate-200">ฐานกิจกรรม DIT (Digital and Information Technology)</option>
+            <option value="ฐานกิจกรรม CAI (Computer Engineering and Artificial Intelligence)" class="bg-slate-900 text-slate-200">ฐานกิจกรรม CAI (Computer Engineering and Artificial Intelligence)</option>
+            <option value="ฐานกิจกรรม RAE (Robotics and Automation Engineering)" class="bg-slate-900 text-slate-200">ฐานกิจกรรม RAE (Robotics and Automation Engineering)</option>
+            <option value="ฐานกิจกรรม IEM (Industrial Engineering and Management)" class="bg-slate-900 text-slate-200">ฐานกิจกรรม IEM (Industrial Engineering and Management)</option>
+            <option value="ฐานกิจกรรม AME (Automotive Manufacturing Engineering)" class="bg-slate-900 text-slate-200">ฐานกิจกรรม AME (Automotive Manufacturing Engineering)</option>
+          </select>
+          <i data-lucide="chevron-down" class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <!-- ปุ่มกดยืนยันสีน้ำเงินวิบวับ -->
+      <button type="submit" id="submitBtn" 
+        class="w-full mt-6 py-3.5 px-6 rounded-xl font-medium text-sm text-white blue-shimmer-btn active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+        <span class="font-semibold tracking-wide">ลงทะเบียน</span>
+        <i data-lucide="send" class="w-4 h-4 text-white"></i>
+      </button>
+
+    </form>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // อย่าลืมนำ Web App URL ที่ได้จากการ Deploy Apps Script มาวางตรงนี้
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx3GZGBm2UZ9dSFqRsBNFntVDT5-rlwDvdf3lcQgFmls4m9mhseA6bIMfpWmNrVps7XIA/exec";
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const originalHtml = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="animate-spin inline-block mr-2">⚡</span> กำลังบันทึกข้อมูล...';
+
+      const payload = {
+        name: document.getElementById('fullName').value.trim(),
+        school: document.getElementById('school').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        career: document.getElementById('career').value.trim(),
+        activity: document.getElementById('activity').value
+      };
+
+      try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          Swal.fire({
+            icon: 'success',
+            title: 'ลงทะเบียนสำเร็จ!',
+            text: 'ข้อมูลถูกส่งเข้าแท็บ Open_House เรียบร้อยแล้ว',
+            background: '#090d16',
+            color: '#f1f5f9',
+            confirmButtonColor: '#2563eb'
+          });
+          document.getElementById('openHouseForm').reset();
+        } else {
+          throw new Error(result.message || "เกิดข้อผิดพลาดในการบันทึก");
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: err.message || 'ไม่สามารถเชื่อมต่อกับระบบได้',
+          background: '#090d16',
+          color: '#f1f5f9',
+          confirmButtonColor: '#dc2626'
+        });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalHtml;
+        lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+</html>
